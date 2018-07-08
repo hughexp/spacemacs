@@ -28,10 +28,12 @@
                                        ("fC"  "files/convert")
                                        ("fe"  "emacs(spacemacs)")
                                        ("fv"  "variables")
+                                       ("fy"  "yank path")
                                        ("F"   "frame")
                                        ("g"   "git/versions-control")
                                        ("h"   "help")
                                        ("hd"  "help-describe")
+                                       ("hP"  "profiler")
                                        ("i"   "insertion")
                                        ("j"   "jump/join/split")
                                        ("k"   "lisp")
@@ -202,6 +204,9 @@
   "fei" 'spacemacs/find-user-init-file
   "fed" 'spacemacs/find-dotfile
   "feD" 'spacemacs/ediff-dotfile-and-template
+  "fee" 'spacemacs/edit-env
+  "feE" 'dotspacemacs/call-user-env
+  "fe C-e" 'spacemacs/force-init-spacemacs-env
   "feR" 'dotspacemacs/sync-configuration-layers
   "fev" 'spacemacs/display-and-copy-version
   "feU"  'configuration-layer/update-packages
@@ -217,7 +222,10 @@
   "fvd" 'add-dir-local-variable
   "fvf" 'add-file-local-variable
   "fvp" 'add-file-local-variable-prop-line
-  "fy" 'spacemacs/show-and-copy-buffer-filename)
+  "fyc" 'spacemacs/copy-file-path-with-line-column
+  "fyd" 'spacemacs/copy-directory-path
+  "fyl" 'spacemacs/copy-file-path-with-line
+  "fyy" 'spacemacs/copy-file-path)
 ;; frame ----------------------------------------------------------------------
 (spacemacs/set-leader-keys
   "Ff" 'find-file-other-frame
@@ -241,7 +249,11 @@
   "hdt" 'describe-theme
   "hdv" 'describe-variable
   "hI"  'spacemacs/report-issue
-  "hn"  'view-emacs-news)
+  "hn"  'view-emacs-news
+  "hPs" 'profiler-start
+  "hPk" 'profiler-stop
+  "hPr" 'profiler-report
+  "hPw" 'profiler-report-write-profile)
 ;; insert stuff ---------------------------------------------------------------
 (spacemacs/set-leader-keys
   "iJ" 'spacemacs/insert-line-below-no-indent
@@ -354,6 +366,12 @@
   :mode font-lock-mode
   :documentation "Toggle syntax highlighting."
   :evil-leader "ths")
+(spacemacs|add-toggle column-indexing
+  :documentation "Toggle column indexing starting at 1."
+  :on (setq column-number-indicator-zero-based nil)
+  :off (setq column-number-indicator-zero-based t)
+  :evil-leader "tz")
+
 (spacemacs|add-toggle transparent-frame
   :status nil
   :on (spacemacs/toggle-transparency)
@@ -404,10 +422,10 @@
 
 (spacemacs/set-leader-keys
   "w TAB"  'spacemacs/alternate-window
-  "w1"  'spacemacs/layout-single-column
-  "w2"  'spacemacs/layout-double-columns
-  "w3"  'spacemacs/layout-triple-columns
-  "w4"  'spacemacs/layout-grid
+  "w1"  'spacemacs/window-split-single-column
+  "w2"  'spacemacs/window-split-double-columns
+  "w3"  'spacemacs/window-split-triple-columns
+  "w4"  'spacemacs/window-split-grid
   "wb"  'spacemacs/switch-to-minibuffer-window
   "wd"  'spacemacs/delete-window
   "wt"  'spacemacs/toggle-current-window-dedication
@@ -487,6 +505,7 @@
   "xlS" 'spacemacs/sort-lines-reverse
   "xlu" 'spacemacs/uniquify-lines
   "xtc" 'transpose-chars
+  "xte" 'transpose-sexps
   "xtl" 'transpose-lines
   "xtp" 'transpose-paragraphs
   "xts" 'transpose-sentences
